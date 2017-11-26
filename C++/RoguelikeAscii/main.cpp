@@ -5,7 +5,9 @@
 using namespace std;
 
 int main() {
-    GameSystem gameSystem("level1.txt");
+
+    //TODO: Add Level Loader
+    GameSystem gameSystem("level1");
 
     gameSystem.GameLoop();
     return 0;

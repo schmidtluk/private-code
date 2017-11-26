@@ -3,8 +3,13 @@
 //
 
 #include "Level.h"
-#include <fstream>
+
+#pragma comment( lib, "Winmm.lib" )
+
 #include <iostream>
+#include <Windows.h>
+#include <mmsystem.h>
+#include <fstream>
 
 Level::Level() {
 
@@ -14,7 +19,7 @@ void Level::load(string fileName) {
 
     //Loads the level
     ifstream file;
-    file.open(fileName);
+    file.open(".\\Levels\\" + fileName + ".txt");
 
     if(!file.fail()){
         string line;
@@ -29,11 +34,11 @@ void Level::load(string fileName) {
     }
 
     file.close();
-    
-    
+
+    //TODO: Add Music Player
 }
 
-void Level::process(Player &player) {
+void Level::process(Player &player, vector <Enemy> &enemies) {
 
     char tile;
 
@@ -42,9 +47,24 @@ void Level::process(Player &player) {
             tile = _levelData[i][j];
 
             switch (tile){
-                case '@':
+                case '@':       //Player
                     player.setPosition(j, i);
                     break;
+
+                case 's':       //Sname
+                    enemies.push_back(Enemy("snake", tile, 1, 3, 1, 10, 10));
+                    break;
+
+                case 'g':       //Goblin
+                    enemies.push_back(Enemy("goblin", tile, 2, 5, 3, 25, 50));
+                    break;
+
+                case 'b':       //Bandit
+                    enemies.push_back(Enemy("bandit", tile, 3, 10, 5, 50, 100));
+                    break;
+
+                case 'D':       //Motherfucking Dragon
+                    enemies.push_back(Enemy("dragon", tile, 10, 250, 250, 1000, 5000));
             }
         }
     }
@@ -64,16 +84,17 @@ void Level::print() {
 void Level::move(char moveTile, Player &player, int newPositionX, int newPositionY) {
 
     switch (moveTile){
-        case '#':
-            printf("You ran into a wall.\n");
-            system("PAUSE");
-            break;
-
         case '.':
             setTile(player.get_x(), player.get_y(), '.');
             player.setPosition(newPositionX, newPositionY);
             setTile(newPositionX, newPositionY, '@');
             break;
+
+        case '#':
+            break;
+
+        default:
+            battleEnemy(player, newPositionX, newPositionY);
 
     }
 }
@@ -132,11 +153,12 @@ void Level::movePlayer(char input, Player &player) {
             system("PAUSE");
             break;
     }
-
-
-
-
 }
+
+void Level::battleEnemy(Player &player, int PositionX, int PositionY) {
+    //TODO: Battle Function
+}
+
 
 char Level::getTile(int x, int y) {
     return _levelData[y][x];
@@ -145,6 +167,7 @@ char Level::getTile(int x, int y) {
 void Level::setTile(int x, int y, char tile) {
     _levelData[y][x] = tile;
 }
+
 
 
 

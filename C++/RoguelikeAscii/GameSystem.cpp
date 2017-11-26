@@ -9,7 +9,7 @@ GameSystem::GameSystem(string levelFileName) {
     _player.init(1, 100, 10, 10, 0);
 
     _level.load(levelFileName);
-    _level.process(_player);
+    _level.process(_player, _enemies);
     _level.print();
 
     system("PAUSE");

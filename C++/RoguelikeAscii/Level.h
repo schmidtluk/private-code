@@ -9,6 +9,7 @@
 #include <string>
 
 #include "Player.h"
+#include "Enemy.h"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ public:
     Level();
 
     void load(string fileName);
-    void process(Player &player);
+    void process(Player &player, vector <Enemy> &enemies);
     void print();
 
     void movePlayer(char input, Player &player);
@@ -30,6 +31,7 @@ private:
     vector <string> _levelData;
 
     void move(char moveTile, Player &player, int newPositionX, int newPoitionY);
+    void battleEnemy(Player &player, int PositionX, int PositionY);
 };
 
 

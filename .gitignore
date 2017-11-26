@@ -53,7 +53,6 @@ dkms.conf
 
 *.iml
 *.xml
-*.txt
 *.cmake
 *.bin
 *.make
