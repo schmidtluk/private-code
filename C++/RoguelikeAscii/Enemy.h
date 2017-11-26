@@ -13,6 +13,14 @@ class Enemy {
 public:
     Enemy(string name, char tile, int level, int attack, int defense, int health, int experienceValue);
 
+    int attack();
+    int takeDamage(int attack);
+
+    void setPosition(int x, int y);
+    void getPosition(int &x, int &y);
+
+    const string &get_name() const;
+
 private:
     string _name;
     char _tile;
@@ -22,6 +30,9 @@ private:
     int _defense;
     int _health;
     int _experienceValue;
+
+    int _x;
+    int _y;
 };
 
 

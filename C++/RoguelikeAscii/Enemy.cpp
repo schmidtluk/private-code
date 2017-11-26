@@ -2,6 +2,8 @@
 // Created by tyroc on 26.11.2017.
 //
 
+#include <random>
+#include <ctime>
 #include "Enemy.h"
 
 
@@ -14,3 +16,42 @@ Enemy::Enemy(string name, char tile, int level, int attack, int defense, int hea
     _health = health;
     _experienceValue = experienceValue;
 }
+
+int Enemy::attack() {
+    static default_random_engine randomEngine(time(NULL));
+    uniform_int_distribution<int> attackRoll (0, _attack);
+
+    return attackRoll(randomEngine);
+}
+
+int Enemy::takeDamage(int attack) {
+    attack -= _defense;
+
+    //check if attack does damage
+    if (attack > 0){
+        _health -= attack;
+
+        //check if dead
+        if (_health <= 0){
+            return _experienceValue;
+        }
+    }
+
+    return 0;
+}
+
+void Enemy::setPosition(int x, int y) {
+    _x = x;
+    _y = y;
+}
+
+void Enemy::getPosition(int &x, int &y) {
+    x = _x;
+    y = _y;
+}
+
+const string &Enemy::get_name() const {
+    return _name;
+}
+
+

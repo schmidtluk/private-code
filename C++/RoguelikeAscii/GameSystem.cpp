@@ -9,8 +9,8 @@ GameSystem::GameSystem(string levelFileName) {
     _player.init(1, 100, 10, 10, 0);
 
     _level.load(levelFileName);
-    _level.process(_player, _enemies);
-    _level.print();
+    _level.process(_player);
+    _level.print(_player);
 
     system("PAUSE");
 }
@@ -20,7 +20,7 @@ void GameSystem::GameLoop() {
     bool isDone = false;
 
     while (!isDone){
-        _level.print();
+        _level.print(_player);
         playerMove();
     }
 

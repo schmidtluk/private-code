@@ -38,7 +38,7 @@ void Level::load(string fileName) {
     //TODO: Add Music Player
 }
 
-void Level::process(Player &player, vector <Enemy> &enemies) {
+void Level::process(Player &player) {
 
     char tile;
 
@@ -52,30 +52,46 @@ void Level::process(Player &player, vector <Enemy> &enemies) {
                     break;
 
                 case 's':       //Sname
-                    enemies.push_back(Enemy("snake", tile, 1, 3, 1, 10, 10));
+                    _enemies.push_back(Enemy("Snake", tile, 1, 3, 1, 10, 10));
+                    _enemies.back().setPosition(j, i);
                     break;
 
                 case 'g':       //Goblin
-                    enemies.push_back(Enemy("goblin", tile, 2, 5, 3, 25, 50));
+                    _enemies.push_back(Enemy("Goblin", tile, 2, 5, 3, 25, 50));
+                    _enemies.back().setPosition(j, i);
                     break;
 
                 case 'b':       //Bandit
-                    enemies.push_back(Enemy("bandit", tile, 3, 10, 5, 50, 100));
+                    _enemies.push_back(Enemy("Bandit", tile, 3, 10, 5, 50, 100));
+                    _enemies.back().setPosition(j, i);
                     break;
 
                 case 'D':       //Motherfucking Dragon
-                    enemies.push_back(Enemy("dragon", tile, 10, 250, 250, 1000, 5000));
+                    _enemies.push_back(Enemy("Dragon", tile, 10, 250, 250, 1000, 5000));
+                    _enemies.back().setPosition(j, i);
+                    break;
+
+                default:
+                    break;
             }
         }
     }
 }
 
-void Level::print() {
+void Level::print(Player player) {
+
+    int counter=0;
 
     std::cout << string(100, '\n');
 
     for (int i = 0; i < _levelData.size(); i++) {
-        printf("%s\n", _levelData[i].c_str());
+        if(counter < 6){
+            printf("%s  ", _levelData[i].c_str());
+            player.printStat(counter);
+            counter++;
+        } else{
+            printf("%s\n", _levelData[i].c_str());
+        }
     }
 
     printf("\n");
@@ -155,8 +171,58 @@ void Level::movePlayer(char input, Player &player) {
     }
 }
 
-void Level::battleEnemy(Player &player, int PositionX, int PositionY) {
-    //TODO: Battle Function
+void Level::updateEnemies(Player &player) {
+
+    for (int i = 0; i < _enemies.size(); ++i) {
+
+    }
+}
+
+void Level::battleEnemy(Player &player, int TargetX, int TargetY) {
+    int enemyX;
+    int enemyY;
+    int playerX;
+    int playerY;
+    int attackRoll;
+    int attackResult;
+
+    player.getPosition(playerX, playerY);
+
+    for (int i = 0; i < _enemies.size(); i++) {
+        _enemies[i].getPosition(enemyX, enemyY);
+
+        if (TargetX == enemyX && TargetY == enemyY) {
+            //Battle
+            attackRoll = player.attack();
+            printf("\nPlayer attacking %s with roll of: %d\n", _enemies[i].get_name().c_str(), attackRoll);
+            attackResult = _enemies[i].takeDamage(attackRoll);
+
+            if (attackResult != 0) {
+                setTile(TargetX, TargetY, '.');
+                print(player);
+                printf("The enemy died. You horrendous monster!!\n");
+                system("PAUSE");
+
+                player.addExperience(attackResult);
+            } else {
+
+                //Monster fighting
+                attackRoll = _enemies[i].attack();
+                printf("%s attacked Player with a roll of %d\n", _enemies[i].get_name().c_str(), attackRoll);
+                attackResult = player.takeDamage(attackRoll);
+
+                if (attackResult != 0) {
+                    setTile(playerX, playerY, 'X');
+                    print(player);
+                    printf("YOU DIED!\n");
+                    system("PAUSE");
+
+                    exit(0);
+                }
+            }
+            system("PAUSE");
+        }
+    }
 }
 
 
@@ -167,6 +233,8 @@ char Level::getTile(int x, int y) {
 void Level::setTile(int x, int y, char tile) {
     _levelData[y][x] = tile;
 }
+
+
 
 
 

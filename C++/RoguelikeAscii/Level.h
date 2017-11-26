@@ -18,20 +18,21 @@ public:
     Level();
 
     void load(string fileName);
-    void process(Player &player, vector <Enemy> &enemies);
-    void print();
+    void process(Player &player);
+    void print(Player player);
 
     void movePlayer(char input, Player &player);
-
+    void updateEnemies(Player &player);
 
     char getTile(int x, int y);
     void setTile(int x, int y, char tile);
 
 private:
     vector <string> _levelData;
+    vector <Enemy> _enemies;
 
     void move(char moveTile, Player &player, int newPositionX, int newPoitionY);
-    void battleEnemy(Player &player, int PositionX, int PositionY);
+    void battleEnemy(Player &player, int TargetX, int TargetY);
 };
 
 

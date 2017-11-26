@@ -11,14 +11,16 @@ public:
     Player();
     void init(int level, int health, int attack, int defense, int experience);
 
-    //Setters
-    void setPosition(int x, int y);
+    int attack();
+    void addExperience(int xp);
+    bool takeDamage(int attack);
 
-    //Getters
+    void printStat(int counter);
+
+    void setPosition(int x, int y);
     void getPosition(int &x, int &y);
 
     int get_x() const;
-
     int get_y() const;
 
 
