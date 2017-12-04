@@ -4,11 +4,12 @@
 
 #include <random>
 #include <ctime>
+#include <utility>
 #include "Enemy.h"
 
 
 Enemy::Enemy(string name, char tile, int level, int attack, int defense, int health, int experienceValue) {
-    _name = name;
+    _name = std::move(name);
     _tile = tile;
     _level = level;
     _attack = attack;
@@ -18,7 +19,7 @@ Enemy::Enemy(string name, char tile, int level, int attack, int defense, int hea
 }
 
 int Enemy::attack() {
-    static default_random_engine randomEngine(time(NULL));
+    static default_random_engine randomEngine(static_cast<unsigned int>(time(nullptr)));
     uniform_int_distribution<int> attackRoll (0, _attack);
 
     return attackRoll(randomEngine);

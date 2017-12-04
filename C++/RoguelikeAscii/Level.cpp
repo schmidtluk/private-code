@@ -8,14 +8,14 @@
 
 #include <iostream>
 #include <Windows.h>
-#include <mmsystem.h>
 #include <fstream>
 
-Level::Level() {
-
-}
+Level::Level() = default;
 
 void Level::load(string fileName) {
+    //Clear Level
+
+    _levelData.clear();
 
     //Loads the level
     ifstream file;
@@ -38,6 +38,7 @@ void Level::load(string fileName) {
     //TODO: Add Music Player
 }
 
+
 void Level::process(Player &player) {
 
     char tile;
@@ -52,22 +53,22 @@ void Level::process(Player &player) {
                     break;
 
                 case 's':       //Sname
-                    _enemies.push_back(Enemy("Snake", tile, 1, 3, 1, 10, 10));
+                    _enemies.emplace_back("Snake", tile, 1, 3, 1, 10, 10);
                     _enemies.back().setPosition(j, i);
                     break;
 
                 case 'g':       //Goblin
-                    _enemies.push_back(Enemy("Goblin", tile, 2, 5, 3, 25, 50));
+                    _enemies.emplace_back("Goblin", tile, 2, 5, 3, 25, 50);
                     _enemies.back().setPosition(j, i);
                     break;
 
                 case 'b':       //Bandit
-                    _enemies.push_back(Enemy("Bandit", tile, 3, 10, 5, 50, 100));
+                    _enemies.emplace_back("Bandit", tile, 3, 10, 5, 50, 100);
                     _enemies.back().setPosition(j, i);
                     break;
 
                 case 'D':       //Motherfucking Dragon
-                    _enemies.push_back(Enemy("Dragon", tile, 10, 250, 250, 1000, 5000));
+                    _enemies.emplace_back("Dragon", tile, 10, 250, 250, 1000, 5000);
                     _enemies.back().setPosition(j, i);
                     break;
 
@@ -84,13 +85,13 @@ void Level::print(Player player) {
 
     std::cout << string(100, '\n');
 
-    for (int i = 0; i < _levelData.size(); i++) {
+    for (auto &i : _levelData) {
         if(counter < 6){
-            printf("%s  ", _levelData[i].c_str());
+            printf("%s  ", i.c_str());
             player.printStat(counter);
             counter++;
         } else{
-            printf("%s\n", _levelData[i].c_str());
+            printf("%s\n", i.c_str());
         }
     }
 
@@ -171,12 +172,12 @@ void Level::movePlayer(char input, Player &player) {
     }
 }
 
-void Level::updateEnemies(Player &player) {
+/*void Level::updateEnemies(Player &player) {
 
     for (int i = 0; i < _enemies.size(); ++i) {
 
     }
-}
+}*/
 
 void Level::battleEnemy(Player &player, int TargetX, int TargetY) {
     int enemyX;
@@ -188,14 +189,14 @@ void Level::battleEnemy(Player &player, int TargetX, int TargetY) {
 
     player.getPosition(playerX, playerY);
 
-    for (int i = 0; i < _enemies.size(); i++) {
-        _enemies[i].getPosition(enemyX, enemyY);
+    for (auto &_enemie : _enemies) {
+        _enemie.getPosition(enemyX, enemyY);
 
         if (TargetX == enemyX && TargetY == enemyY) {
             //Battle
             attackRoll = player.attack();
-            printf("\nPlayer attacking %s with roll of: %d\n", _enemies[i].get_name().c_str(), attackRoll);
-            attackResult = _enemies[i].takeDamage(attackRoll);
+            printf("\nPlayer attacking %s with roll of: %d\n", _enemie.get_name().c_str(), attackRoll);
+            attackResult = _enemie.takeDamage(attackRoll);
 
             if (attackResult != 0) {
                 setTile(TargetX, TargetY, '.');
@@ -207,8 +208,8 @@ void Level::battleEnemy(Player &player, int TargetX, int TargetY) {
             } else {
 
                 //Monster fighting
-                attackRoll = _enemies[i].attack();
-                printf("%s attacked Player with a roll of %d\n", _enemies[i].get_name().c_str(), attackRoll);
+                attackRoll = _enemie.attack();
+                printf("%s attacked Player with a roll of %d\n", _enemie.get_name().c_str(), attackRoll);
                 attackResult = player.takeDamage(attackRoll);
 
                 if (attackResult != 0) {
@@ -233,6 +234,20 @@ char Level::getTile(int x, int y) {
 void Level::setTile(int x, int y, char tile) {
     _levelData[y][x] = tile;
 }
+
+void Level::mainMenu() {
+
+    //Load ASCII File Main
+    this->load("main");
+
+    //Print main menu
+    for (auto &i : _levelData) {
+        printf("%s\n", i.c_str());
+    }
+
+    system("PAUSE");
+}
+
 
 
 

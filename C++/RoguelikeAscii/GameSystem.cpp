@@ -3,12 +3,16 @@
 //
 
 #include <conio.h>
+#include <cstdlib>
+#include <utility>
+#include <cstdio>
 #include "GameSystem.h"
 
 GameSystem::GameSystem(string levelFileName) {
     _player.init(1, 100, 10, 10, 0);
 
-    _level.load(levelFileName);
+    _level.mainMenu();
+    _level.load(std::move(levelFileName));
     _level.process(_player);
     _level.print(_player);
 

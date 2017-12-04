@@ -5,6 +5,7 @@
 #include "Player.h"
 #include <random>
 #include <ctime>
+#include <cstdio>
 
 using namespace std;
 
@@ -24,7 +25,7 @@ void Player::init(int level, int health, int attack, int defense, int experience
 }
 
 int Player::attack() {
-    static default_random_engine randomEngine(time(NULL));
+    static default_random_engine randomEngine(static_cast<unsigned int>(time(NULL)));
     uniform_int_distribution<int> attackRoll (0, _attack);
 
     return attackRoll(randomEngine);
@@ -60,7 +61,7 @@ bool Player::takeDamage(int attack) {
         }
     }
 
-    return 0;
+    return false;
 }
 
 void Player::printStat(int counter) {

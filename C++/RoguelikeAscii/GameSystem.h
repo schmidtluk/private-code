@@ -13,7 +13,7 @@ using namespace std;
 
 class GameSystem {
 public:
-    GameSystem(string levelFileName);
+    explicit GameSystem(string levelFileName);
 
     void GameLoop();
     void playerMove();

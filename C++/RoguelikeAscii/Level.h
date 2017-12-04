@@ -18,11 +18,12 @@ public:
     Level();
 
     void load(string fileName);
+    void mainMenu();
     void process(Player &player);
     void print(Player player);
 
     void movePlayer(char input, Player &player);
-    void updateEnemies(Player &player);
+    //void updateEnemies(Player &player);
 
     char getTile(int x, int y);
     void setTile(int x, int y, char tile);
